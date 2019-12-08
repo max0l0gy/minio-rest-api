@@ -8,12 +8,12 @@ import lombok.Data;
 public class FileUploadResponse {
 
     public enum Status{
-        OK, FAIL
+        OK, ERROR
     }
 
     private String status;
     private String uri;
-
+    private String message;
 
 
 }

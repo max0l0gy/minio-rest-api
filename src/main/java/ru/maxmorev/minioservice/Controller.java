@@ -41,7 +41,7 @@ public class Controller {
             @RequestParam(value = "key", required = true) String key,
             @RequestParam("file") MultipartFile file) {
         log.info("KEY: " + key);
-        if(!accessKey.equals(key)){
+        if (!accessKey.equals(key)) {
             throw new IllegalAccessException("Access key error");
         }
         if (minioClient.bucketExists(bucket)) {
@@ -65,7 +65,8 @@ public class Controller {
                 );
         log.info("{} is successfully uploaded", file.getOriginalFilename());
         return new FileUploadResponse(FileUploadResponse.Status.OK.name(),
-                serviceEndpoint + "/io/jpg/"+bucket+"/" + file.getOriginalFilename());
+                serviceEndpoint + "/io/jpg/" + bucket + "/" + file.getOriginalFilename(),
+                null);
     }
 
     @SneakyThrows
