@@ -13,7 +13,7 @@ Status 200 OK
 { status: "OK", uri: "http://localhost:8080/io/jpg/{bucket}/{originalFileName}" , message: null}
 
 Status 500 fail
-{ status: "error", url: "http://localhost:8080/io/jpg/{bucket}/{originalFileName}", message: "404 Example error message"}
+{ status: "error", uri: "http://localhost:8080/io/jpg/{bucket}/{originalFileName}", message: "404 Example error message"}
 ~~~
 
 method GET:
