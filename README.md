@@ -1,5 +1,5 @@
 # Java minio rest-api
-
+Rest API for upload/view jpg files with Object Storage Server Minio
 REST API:
 ~~~
 method POST:
