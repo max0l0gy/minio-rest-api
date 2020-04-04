@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-rest-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: minio-rest-api
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-rest-api-secrets
+type: Opaque
+data:
+  MINIO_HOST:  "echo -n 'YOU KEY' | base64"
+  MINIO_REST_ENDPOINT: "echo -n 'YOU KEY' | base64"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-rest-api
+  labels:
+    app: minio-rest-api
+spec:
+  selector:
+    matchLabels:
+      app: minio-rest-api
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: minio-rest-api
+    spec:
+      containers:
+        - name: minio-rest-api
+          image: maxmorev/minio-rest-api
+          ports:
+            - containerPort: 8080
+              name: springboot
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 3
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 2
+            periodSeconds: 8
+            failureThreshold: 1
+          env:
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_REST_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: minio-rest-api-secrets
+                  key: MINIO_HOST
+            - name: MINIO_REST_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: minio-rest-api-secrets
+                  key: MINIO_REST_ENDPOINT

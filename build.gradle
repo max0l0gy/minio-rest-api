@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'ru.maxmorev'
-version = '0.0.1'
+version = '0.0.2'
 sourceCompatibility = '11'
 
 configurations {
@@ -24,6 +24,7 @@ dependencies {
 	implementation group: 'io.minio', name: 'minio', version: '6.0.11'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

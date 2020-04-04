@@ -1,17 +1,31 @@
 spring:
+  application:
+    name: minio-rest-api
+  profiles:
+    active: dev
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
 
 minio:
-  endpoint: http://localhost:9000
-  accessKey: AKA47EXAMPLEDOC
-  secretKey: JAVATESTEXAMPLEKEY
+  endpoint: ${MINIO_HOST}:9000
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}
 
 file:
-  endpoint: shttp://localhost:8080
-  accessKey: youAccessKey
+  endpoint: ${MINIO_REST_ENDPOINT}
+  accessKey: ${MINIO_REST_ACCESS_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+  metrics:
+    export:
+      atlas:
+        enabled: false
 
 server:
   port: 8080

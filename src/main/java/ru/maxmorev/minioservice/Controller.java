@@ -28,12 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xmlpull.v1.XmlPullParserException;
 import ru.maxmorev.minioservice.domain.FileUploadResponse;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLConnection;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 

@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class FileUploadResponse {
 
-    public enum Status{
+    public enum Status {
         OK, ERROR
     }
 
