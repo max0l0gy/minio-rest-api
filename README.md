@@ -1,6 +1,6 @@
 # Java minio rest-api
 Rest API for upload/view files with Object Storage Server Minio
-
+useful link: https://httpie.org/doc
 ###REST API:
 ##### Method POST:
 ~~~
