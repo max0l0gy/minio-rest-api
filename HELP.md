@@ -22,24 +22,25 @@ then use minio-deployment.yaml to deploy minio in your kube cluster
 #### Test app local:
 ````
 docker build -t maxmorev/minio-rest-api .
+docker build -t maxmorev/minio-rest-api:0.0.2 .
 
 docker images
 ````
 ##### Run your bootiful app in docker
 ````
-docker run  -p 8081:8080 \
--e MINIO_HOST='http://localhost' \
--e MINIO_ACCESS_KEY='MINIOACCESS' \
--e MINIO_SECRET_KEY='SUPERSECRET1234' \
--e MINIO_REST_ACCESS_KEY='MYMINIOJAVAACCESS' \
--e MINIO_REST_ENDPOINT='http://yourendpoint' \
+docker run  -p 8085:8080 \
+-e MINIO_HOST='http://192.168.199.5' \
+-e MINIO_ACCESS_KEY='AKA47EXAMPLEDOC' \
+-e MINIO_SECRET_KEY='JAVATESTEXAMPLEKEY' \
+-e MINIO_REST_ACCESS_KEY='AKA47EXAMPLEDOC' \
+-e MINIO_REST_ENDPOINT='http://localhost:8085' \
 --name minio-rest-api \
 maxmorev/minio-rest-api
 ````
 
 ##### Test service:
 ```` 
-http -f POST localhost:8081/io/upload/file/test/?key=MYMINIOJAVAACCESS file@./cyberpunk.jpg
+http -f POST localhost:8081/io/upload/file/test/?key=MYMINIOJAVAACCESS file@./pictureExample.jpg
 ````
 ##### Response:
 ````

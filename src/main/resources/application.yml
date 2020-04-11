@@ -7,7 +7,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
+      enabled: true
 minio:
   endpoint: ${MINIO_HOST}:9000
   accessKey: ${MINIO_ACCESS_KEY}
