@@ -17,8 +17,8 @@ metadata:
   name: minio-rest-api-secrets
 type: Opaque
 data:
-  MINIO_HOST:  "echo -n 'YOU KEY' | base64"
-  MINIO_REST_ENDPOINT: "echo -n 'YOU KEY' | base64"
+  MINIO_HOST: aHR0cDovL21pbmlvLXNydg==
+  MINIO_REST_ENDPOINT: aHR0cHM6Ly9pby50aXRzb25maXJlLnN0b3Jl
 
 ---
 apiVersion: apps/v1
@@ -45,6 +45,13 @@ spec:
           ports:
             - containerPort: 8080
               name: springboot
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "250m" # 1/4 core
+            limits:
+              memory: "400Mi"
+              cpu: "1000m" # 1 core
           readinessProbe:
             httpGet:
               path: /actuator/health
