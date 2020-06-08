@@ -86,3 +86,6 @@ Execute shell in da pod:
 ````
 kubectl exec -t -i minio-rest-api-66d8656456-wxrmw sh
 ````
+
+Automate your Builds on Docker Hub by Writing a Build Hook Script!
+https://codeclimbing.com/automate-your-builds-on-docker-hub-by-writing-a-build-hook-script/
