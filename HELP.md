@@ -21,8 +21,8 @@ then use minio-deployment.yaml to deploy minio in your kube cluster
 
 #### Test app local:
 ````
-maxmorev/minio-rest-api:0.0.2 .
-docker build -t maxmorev/minio-rest-api:0.0.2 .
+maxmorev/minio-rest-api:0.0.3 .
+docker build -t maxmorev/minio-rest-api:0.0.3 .
 
 docker images
 ````
@@ -62,7 +62,7 @@ Transfer-Encoding: chunked
 docker container exec -it minio-rest-api sh
 
 docker login
-docker push maxmorev/minio-rest-api:0.0.2
+docker push maxmorev/minio-rest-api:0.0.3
 
 kubectl apply -f minio-rest-api-deployment.yaml
 `````

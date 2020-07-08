@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: minio-rest-api
-          image: maxmorev/minio-rest-api:0.0.2
+          image: maxmorev/minio-rest-api:0.0.3
           ports:
             - containerPort: 8080
               name: springboot

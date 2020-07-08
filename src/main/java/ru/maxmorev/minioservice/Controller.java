@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,13 +53,12 @@ public class Controller {
     }
 
     @SneakyThrows
-    @RequestMapping(path = "/{bucket}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{bucket}")
     @ResponseBody
     public FileUploadResponse uploadFile(
             @PathVariable(name = "bucket") String bucket,
             @RequestParam(value = "key", required = true) String key,
             @RequestParam("file") MultipartFile file) {
-        log.info("KEY: " + key);
         if (!accessKey.equals(key)) {
             throw new IllegalAccessException("Access key error");
         }
@@ -71,9 +72,7 @@ public class Controller {
         InputStream is = file.getInputStream();
         // only by file name
         String mimeType = getContentType(is, file.getOriginalFilename());
-        log.info("contentType is {}", mimeType);
         is = file.getInputStream();
-        log.info("is.available() {}", is.available());
         minioClient
                 .putObject(
                         bucket,
@@ -84,20 +83,17 @@ public class Controller {
                         null,
                         mimeType);
         is.close();
-        log.info("{} is successfully uploaded", file.getOriginalFilename());
         return new FileUploadResponse(FileUploadResponse.Status.OK.name(),
                 serviceEndpoint + "/" + bucket + "/" + file.getOriginalFilename(),
-                null);
+                "Uploaded");
     }
 
-    @RequestMapping(path = "/{bucket}/{fileName}", method = RequestMethod.GET)
+    @GetMapping(path = "/{bucket}/{fileName}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable(name = "bucket") String bucket,
                                                             @PathVariable(name = "fileName") String fileName) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InvalidArgumentException, InvalidResponseException, InternalException, NoResponseException, InvalidBucketNameException, XmlPullParserException, ErrorResponseException {
         byte[] bytes = minioClient.getObject(bucket, fileName).readAllBytes();
         String mimeType = getContentType(new ByteArrayInputStream(bytes), fileName);
-        log.info("contentType is {}", mimeType);
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-        log.info("length {}", in.available());
         return ResponseEntity
                 .ok()
                 .contentLength(in.available())
