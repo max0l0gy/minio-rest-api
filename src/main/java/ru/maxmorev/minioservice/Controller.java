@@ -37,7 +37,6 @@ import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 @RestController
-@RequestMapping("/io")
 public class Controller {
 
     @Value("${file.endpoint}")
@@ -52,7 +51,7 @@ public class Controller {
     }
 
     @SneakyThrows
-    @RequestMapping(path = "/upload/file/{bucket}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/{bucket}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public FileUploadResponse uploadFile(
             @PathVariable(name = "bucket") String bucket,
@@ -87,11 +86,11 @@ public class Controller {
         is.close();
         log.info("{} is successfully uploaded", file.getOriginalFilename());
         return new FileUploadResponse(FileUploadResponse.Status.OK.name(),
-                serviceEndpoint + "/io/file/" + bucket + "/" + file.getOriginalFilename(),
+                serviceEndpoint + "/" + bucket + "/" + file.getOriginalFilename(),
                 null);
     }
 
-    @RequestMapping(path = "/file/{bucket}/{fileName}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{bucket}/{fileName}", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable(name = "bucket") String bucket,
                                                             @PathVariable(name = "fileName") String fileName) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InvalidArgumentException, InvalidResponseException, InternalException, NoResponseException, InvalidBucketNameException, XmlPullParserException, ErrorResponseException {
         byte[] bytes = minioClient.getObject(bucket, fileName).readAllBytes();
