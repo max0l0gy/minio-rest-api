@@ -15,7 +15,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: minio-pv
+  name: minio-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -58,6 +58,13 @@ spec:
           volumeMounts:
             - name: minio-volume
               mountPath: "/data"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m" # 1/4 core
+            limits:
+              memory: "250Mi"
+              cpu: "500m" # 1/2 core
           env:
             - name: MINIO_ACCESS_KEY
               valueFrom:

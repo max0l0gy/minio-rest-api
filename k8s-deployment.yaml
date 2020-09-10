@@ -41,17 +41,17 @@ spec:
     spec:
       containers:
         - name: minio-rest-api
-          image: maxmorev/minio-rest-api:0.0.3
+          image: maxmorev/minio-rest-api:latest
           ports:
             - containerPort: 8080
               name: springboot
           resources:
             requests:
-              memory: "300Mi"
+              memory: "256Mi"
               cpu: "250m" # 1/4 core
             limits:
-              memory: "400Mi"
-              cpu: "1000m" # 1 core
+              memory: "512Mi"
+              cpu: "500m" # 1 core
           readinessProbe:
             httpGet:
               path: /actuator/health

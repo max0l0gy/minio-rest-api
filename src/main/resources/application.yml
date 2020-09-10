@@ -5,8 +5,8 @@ spring:
     active: dev
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 100MB
+      max-request-size: 100MB
       enabled: true
 minio:
   endpoint: ${MINIO_HOST}:9000

@@ -1,0 +1,72 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: set environment variable APP_DOCKER_REPO
+        uses: allenevans/set-env@v1.0.0
+        with:
+          APP_DOCKER_REPO: maxmorev/minio-rest-api
+
+      - name: Print name for docker repository
+        run: echo ${APP_DOCKER_REPO}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{env.APP_DOCKER_REPO}}
+          tags: 0.0.${{ github.run_number }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Update deployment file
+        run: TAG=0.0.$(echo ${{ github.run_number }} | head -c7) && sed -i 's|${{env.APP_DOCKER_REPO}}:latest|${{env.APP_DOCKER_REPO}}:'${TAG}'|' $GITHUB_WORKSPACE/k8s-deployment.yaml
+
+      - name: Update minio-secrets MINIO_ACCESS_KEY
+        run: sed -i 's|{MINIO_ACCESS_KEY}|${{secrets.MINIO_ACCESS_KEY}}|' $GITHUB_WORKSPACE/minio-secrets.yaml
+      - name: Update minio-secrets MINIO_SECRET_KEY
+        run: sed -i 's|{MINIO_SECRET_KEY}|${{secrets.MINIO_SECRET_KEY}}|' $GITHUB_WORKSPACE/minio-secrets.yaml
+
+      - name: Print image version
+        run: cat $GITHUB_WORKSPACE/k8s-deployment.yaml | grep image
+
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save k8s-eshop
+
+      #k8s deploy
+      - name: Deploy to DigitalOcean Kubernetes minio-secrets
+        run: kubectl apply -f $GITHUB_WORKSPACE/minio-secrets.yaml
+      - name: Deploy to DigitalOcean Kubernetes minio-srv
+        run: kubectl apply -f $GITHUB_WORKSPACE/minio-deployment.yaml
+      - name: Deploy to DigitalOcean Kubernetes secrets
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s-secrets.yaml
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s-deployment.yaml
