@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: minio-volume
           persistentVolumeClaim:
-            claimName: minio-pv
+            claimName: minio-pvc
       containers:
         - name: minio-srv
           image: minio/minio
