@@ -11,16 +11,6 @@ spec:
     app: minio-rest-api
 
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: minio-rest-api-secrets
-type: Opaque
-data:
-  MINIO_HOST: aHR0cDovL21pbmlvLXNydg==
-  MINIO_REST_ENDPOINT: aHR0cHM6Ly9pby50aXRzb25maXJlLnN0b3Jl
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
