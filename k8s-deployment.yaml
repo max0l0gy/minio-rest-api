@@ -56,7 +56,7 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
             timeoutSeconds: 5
             periodSeconds: 3
             failureThreshold: 1
@@ -64,7 +64,7 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 20
+            initialDelaySeconds: 70
             timeoutSeconds: 2
             periodSeconds: 8
             failureThreshold: 1
