@@ -60,11 +60,11 @@ spec:
               mountPath: "/data"
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m" # 1/4 core
+              memory: "512Mi"
+              cpu: "512m" # 1/2 core
             limits:
-              memory: "250Mi"
-              cpu: "500m" # 1/2 core
+              memory: "512Mi"
+              cpu: "1000m" # 1
           env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
